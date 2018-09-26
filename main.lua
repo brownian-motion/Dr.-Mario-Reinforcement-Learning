@@ -19,7 +19,7 @@ function printState(file, buttons)
 end
 
 log = io.open("dr_mario.csv", "w+");
-log:write("frame,score,left,right,A,start\n");
+log:write("frame,mode,score,left,right,A,start\n");
 
 while(true) do
 	button_state = getRandomButtonState();
@@ -27,6 +27,7 @@ while(true) do
 	score = getScore();
 
 	log:write(emu.framecount(), ",");
+	log:write(getMode(), ",");
 	log:write(score, ",");
 	printState(log, button_state)
 	log:write("\n");

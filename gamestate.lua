@@ -6,3 +6,7 @@ function getScore()
 	memory.readbyte(0x072D)*1000 + 
 	memory.readbyte(0x072E)*10000;
 end;
+
+function getMode()
+	return memory.readbyte(0x0046);
+end;
