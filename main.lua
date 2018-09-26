@@ -29,7 +29,7 @@ while(true) do
 	log:write(emu.framecount(), ",");
 	log:write(getMode(), ",");
 	log:write(score, ",");
-	printState(log, button_state)
+	printState(log, joypad.read(1))
 	log:write("\n");
 	log:flush();
 
