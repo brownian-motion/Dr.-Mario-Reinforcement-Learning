@@ -1,10 +1,5 @@
-function getScore()
-	return memory.readbyte(0x072A)   + 
-	memory.readbyte(0x072B)*10   + 
-	memory.readbyte(0x072C)*100  + 
-	memory.readbyte(0x072D)*1000 + 
-	memory.readbyte(0x072E)*10000;
-end;
+require "actions"
+require "gamestate"
 
 function getRandomButtonState()
 	local prob = math.random() * 3.01;
@@ -15,21 +10,6 @@ function getRandomButtonState()
 	end;
 end;
 
-function leftAction()
-	return {left=true};
-end;
-
-function rightAction()
-	return {right=true};
-end;
-
-function startAction()
-	return {start=true};
-end;
-
-function aAction()
-	return {A=true};
-end;
 
 function printState(file, buttons)
 	file:write(buttons["left"] and 1 or 0, ",")
