@@ -1,19 +1,34 @@
 function getScore()
 	return memory.readbyte(0x072A)   + 
-	    memory.readbyte(0x072B)*10   + 
-	    memory.readbyte(0x072C)*100  + 
-	    memory.readbyte(0x072D)*1000 + 
-	    memory.readbyte(0x072E)*10000;
+	memory.readbyte(0x072B)*10   + 
+	memory.readbyte(0x072C)*100  + 
+	memory.readbyte(0x072D)*1000 + 
+	memory.readbyte(0x072E)*10000;
 end;
 
 function getRandomButtonState()
-	local dir_prob = math.random() * 3;
-	return {
-		left=dir_prob < 1, 
-		right=dir_prob >= 1 and dir_prob < 2, 
-		A=math.random() < 0.5, 
-		start=math.random() < 0.01
-	}
+	local prob = math.random() * 3.01;
+	if(prob < 1) then return leftAction();
+	elseif(prob < 2) then return rightAction();
+	elseif(prob < 3) then return aAction();
+	else return startAction();
+	end;
+end;
+
+function leftAction()
+	return {left=true};
+end;
+
+function rightAction()
+	return {right=true};
+end;
+
+function startAction()
+	return {start=true};
+end;
+
+function aAction()
+	return {A=true};
 end;
 
 function printState(file, buttons)
