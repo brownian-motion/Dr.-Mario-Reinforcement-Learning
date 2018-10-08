@@ -26,12 +26,14 @@ while(true) do
 	joypad.write(1, button_state);
 	score = getScore();
 
-	log:write(emu.framecount(), ",");
-	log:write(getMode(), ",");
-	log:write(score, ",");
-	printState(log, joypad.read(1))
-	log:write("\n");
-	log:flush();
+	-- log:write(emu.framecount(), ",");
+	-- log:write(getMode(), ",");
+	-- log:write(score, ",");
+	-- printState(log, joypad.read(1))
+	-- log:write("\n");
+	-- log:flush();
+
+	print(getStateAsTable())
 
 	emu.frameadvance();
 end;
