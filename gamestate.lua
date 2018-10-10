@@ -14,6 +14,12 @@ PILL_VERT = 1
 SEARCH_DIST_BELOW = 5
 SEARCH_DIST_BESIDE = 2
 
+
+GAME_MODE_MENU = 255
+GAME_MODE_STARTING = 8
+GAME_MODE_PLAYING = 4
+GAME_MODE_GAME_OVER = 7
+
 function getScore()
 	return memory.readbyte(0x072A)   + 
 	memory.readbyte(0x072B)*10   + 

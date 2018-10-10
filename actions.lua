@@ -1,16 +1,20 @@
 
 function leftAction()
 	return {left=true};
-end;
+end
 
 function rightAction()
 	return {right=true};
-end;
+end
 
 function startAction()
 	return {start=true};
-end;
+end
 
 function aAction()
 	return {A=true};
-end;
+end
+
+function noAction()
+	return {};
+end
