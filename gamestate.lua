@@ -134,7 +134,7 @@ function getLocalNeighborhoodBelow(pill_state)
 	return highest
 end
 
-function getStateAsTable()
+function getRelativeStateAsTable()
 	local pill_state = getPillState();
 	return {
 		pill_orientation = pill_state.orientation,
@@ -142,7 +142,7 @@ function getStateAsTable()
 	}
 end
 
-function convertStateToArray(state)
+function convertRelativeStateToArray(state)
 	local state_arr = { }
 	local i = 1 -- arrays start at 1
 	for col_offset = -SEARCH_DIST_BESIDE,SEARCH_DIST_BESIDE do
@@ -155,6 +155,6 @@ function convertStateToArray(state)
 	return state_arr;
 end
 
-function getStateAsArray()
-	return convertStateToArray(getStateAsTable())
+function getRelativeStateAsArray()
+	return convertRelativeStateToArray(getRelativeStateAsTable())
 end

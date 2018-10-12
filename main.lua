@@ -21,29 +21,35 @@ log = io.open("dr_mario.csv", "w+");
 log:write("frame,mode,score,left,right,A,start\n");
 
 -- enter the game
-while(getMode() ~= GAME_MODE_STARTING) do
-	joypad.write(1, startAction());
-	emu.frameadvance();
-	joypad.write(1, noAction());
-	print(getMode());
-	emu.frameadvance();
+function enterGame()
+	while(getMode() ~= GAME_MODE_STARTING) do
+		joypad.write(1, startAction());
+		emu.frameadvance();
+		joypad.write(1, noAction());
+		print(getMode());
+		emu.frameadvance();
+	end
 end
 
-while(true) do
-	button_state = getRandomButtonState();
-	joypad.write(1, button_state);
-	score = getScore();
+enterGame()
 
-	-- log:write(emu.framecount(), ",");
-	-- log:write(getMode(), ",");
-	-- log:write(score, ",");
-	-- printControllerState(log, joypad.read(1))
-	-- log:write("\n");
-	-- log:flush();
+function playRandomGame()
+	while(true) do
+		button_state = getRandomButtonState();
+		joypad.write(1, button_state);
+		score = getScore();
 
-	-- print(getStateAsTable())
+		-- log:write(emu.framecount(), ",");
+		-- log:write(getMode(), ",");
+		-- log:write(score, ",");
+		-- printControllerState(log, joypad.read(1))
+		-- log:write("\n");
+		-- log:flush();
 
-	emu.frameadvance();
+		-- print(getRelativeStateAsArray())
+
+		emu.frameadvance();
+	end
 end
 
-
+playRandomGame()
