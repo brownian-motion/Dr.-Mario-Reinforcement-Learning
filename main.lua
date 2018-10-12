@@ -1,9 +1,6 @@
 require "actions"
 require "gamestate"
 
-GAME_MODE_STARTING = 8
-GAME_MODE_PLAYING = 4
-
 function getRandomButtonState()
 	local prob = math.random() * 3.01;
 	if(prob < 1) then return leftAction();
