@@ -38,3 +38,16 @@ function getActionForName(action_name)
 	out[action_name] = true; -- only supports a single action
 	return out;
 end
+
+function getRandomButtonPressAction()
+	local prob = math.random() * 4;
+	if(prob < 1) then return leftAction();
+	elseif(prob < 2) then return rightAction();
+	elseif(prob < 3) then return aAction();
+	else return noAction();
+	end
+end
+
+function getRandomActionNameForSarsa()
+	return getNameOfAction(getRandomButtonPressAction());
+end
