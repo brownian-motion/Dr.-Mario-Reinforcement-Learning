@@ -1,12 +1,12 @@
 INITIAL_SCORE = 0
 
-function learn_sarsa(current_state, current_action, reward, next_state, next_action, learning_rate, future_score_weight, saved_scores)
+function learn_sarsa(current_state, current_action, reward, next_state, next_action, learning_rate, discount_rate, saved_scores)
 	current_state_as_str = table.concat(current_state, ",");
 	next_state_as_str = table.concat(current_state, ",");
 
 	current_score = getSavedScore(saved_scores, current_state_as_str, current_action, INITIAL_SCORE);
 	next_state_score = getSavedScore(saved_scores, next_state_as_str, next_action, INITIAL_SCORE);
-	next_score = current_score + learning_rate * (reward + future_score_weight * next_state_score - current_score);
+	next_score = current_score + learning_rate * (reward + discount_rate * next_state_score - current_score);
 
 	setSavedScore(saved_scores, state_name, action_name, INITIAL_SCORE)
 
