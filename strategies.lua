@@ -140,7 +140,7 @@ function playQLearning(learning_rate, discount_rate)
 	print("Playing game with Q learning. Logging to " .. filename)
 
 	log = io.open(filename, "w+");
-	log:write("episode,frame,mode,score,reward,action\n");
+	log:write("episode,score\n");
 
 	local saved_scores = {}	
 	local current_state
@@ -152,7 +152,7 @@ function playQLearning(learning_rate, discount_rate)
 
 	local episode_number = 1
 
-	while(true) do
+	while(episode_number <= 1000) do
 
 		enterGame()
 
@@ -179,11 +179,11 @@ function playQLearning(learning_rate, discount_rate)
 
 			saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)		
 
-			log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
+			--log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
 		end
 
 		print("Episode done. Score " .. getScore())
-
+		log:write(episode_number, ",", getScore())
 		episode_number = episode_number + 1
 
 	end
