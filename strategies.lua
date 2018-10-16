@@ -54,8 +54,8 @@ function playSarsaGame(learning_rate, discount_rate)
 
 	print("Playing game with SARSA learning. Logging to " .. filename)
 
-	-- log = io.open(filename, "w+");
-	-- log:write("episode,frame,mode,score,action\n");
+	log = io.open(filename, "w+");
+	log:write("episode,frame,mode,score,action\n");
 
 	local saved_scores = {}	
 	local current_state
@@ -94,7 +94,7 @@ function playSarsaGame(learning_rate, discount_rate)
 
 			saved_scores = learn_sarsa(current_state, current_action_name, reward, next_state, next_action_name, learning_rate, discount_rate, saved_scores)		
 
-			-- log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", current_action_name, "\n")
+			log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", current_action_name, "\n")
 		end
 
 		print("Episode done. Score " .. getScore())
