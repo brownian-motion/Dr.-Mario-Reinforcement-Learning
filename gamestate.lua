@@ -155,7 +155,7 @@ function convertRelativeStateToArray(state)
 	for col_offset = -SEARCH_DIST_BESIDE,SEARCH_DIST_BESIDE do
 		local highest = state.grid[col_offset]
 		state_arr[i] = highest.dist_below; i = i + 1
-		state_arr[i] = highest.is_virus and 1 or 0; i = i + 1 -- ternary operator used because we can't do string concat on booleans
+		-- state_arr[i] = highest.is_virus and 1 or 0; i = i + 1 -- ternary operator used because we can't do string concat on booleans
 		state_arr[i] = highest.match_color; i = i + 1
 	end
 	state_arr[i] = state.pill_orientation

@@ -55,7 +55,7 @@ function playSarsaGame(learning_rate, discount_rate)
 	print("Playing game with SARSA learning. Logging to " .. filename)
 
 	log = io.open(filename, "w+");
-	log:write("episode,frame,mode,score,action\n");
+	log:write("episode,frame,mode,score,reward,action\n");
 
 	local saved_scores = {}	
 	local current_state
@@ -84,9 +84,9 @@ function playSarsaGame(learning_rate, discount_rate)
 
 			next_state = getRelativeStateAsArray()
 			next_action_name = getActionForSarsa(saved_scores, next_state)
-			reward = getScore() - score_last_frame - 1 -- -1 to punish it for not learning
+			reward = (getScore() - score_last_frame)*100 - 1 -- -1 to punish it for not learning
 			if(getMode() == GAME_MODE_JUST_LOST) then
-				reward = -100
+				reward = -50
 				print("Lost a game.");
 			elseif(getMode() ~= GAME_MODE_PLAYING) then
 				print("NEW GAME MODE DISCOVERED ".. getMode())
@@ -94,7 +94,7 @@ function playSarsaGame(learning_rate, discount_rate)
 
 			saved_scores = learn_sarsa(current_state, current_action_name, reward, next_state, next_action_name, learning_rate, discount_rate, saved_scores)		
 
-			log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", current_action_name, "\n")
+			log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
 		end
 
 		print("Episode done. Score " .. getScore())
@@ -115,7 +115,18 @@ function drawBoxAroundPill()
 	drawBoxAroundTiles(r, c - SEARCH_DIST_BESIDE, r - SEARCH_DIST_BELOW, c + SEARCH_DIST_BESIDE)
 	for col_offset = -SEARCH_DIST_BESIDE, SEARCH_DIST_BESIDE do
 		local highest = state.grid[col_offset]
-		local color = highest.is_virus and "#FF000077" or "#00FFFF77"
+		
+		local color;
+		if(highest.match_color == MATCHES_LEFT) then
+			color = "#00FF0077"
+		elseif(highest.match_color == MATCHES_RIGHT) then
+			color = "#00FFFF77"
+		elseif(highest.match_color == MATCHES_BOTH) then
+			color = "#FFFFFF77"
+		else 
+			color = "#88777777"
+		end
+		-- local color = highest.is_virus and "#FF000077" or "#00FFFF77"
 		drawBoxAroundTile(r - highest.dist_below, c + col_offset, color);
 	end
 end
