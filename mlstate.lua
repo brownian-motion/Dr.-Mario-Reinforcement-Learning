@@ -49,3 +49,27 @@ function getBestActionAndScoreForState(saved_scores, state_name)
 	end
 	return max_action, max_score;
 end
+
+function qlearn(current_state, current_action, reward, learning_rate, discount_rate, saved_scores, next_state)
+	assert(type(current_state) == "table", "Current state for SARSA learning must be a table")
+	assert(type(next_state) == "table", "Next state for SARSA learning must be a table")
+	assert(type(current_action) == "string", "Current action for SARSA learning must be a string")
+	--assert(type(next_action) == "string", "Next state for SARSA learning must be a string")
+
+	local current_state_as_str = table.concat(current_state, ",");
+	--local next_state_as_str = table.concat(next_state, ",");
+
+	local current_score = getSavedScore(saved_scores, current_state_as_str, current_action, INITIAL_SCORE);
+	local next_state_score = getSavedScore(saved_scores, next_state_as_str, next_action, INITIAL_SCORE);
+	--local next_score = current_score + learning_rate * (reward + discount_rate * next_state_score - current_score);
+	local _,max_score = getBestActionAndScoreForState(saved_scores,next_state)
+	max_score = max_score or INITIAL_SCORE
+	local next_score = (1 - learning_rate)*current_score + learning_rate*(reward + discount_rate*max_score)
+
+
+	initial_state = {left = INITIAL_SCORE, right = INITIAL_SCORE, A = INITIAL_SCORE, [""] = INITIAL_SCORE}
+
+	setSavedScore(saved_scores, current_state_as_str, current_action, next_score, initial_state)
+
+	return saved_scores -- not necessary, since tables are pass-by-reference, but could be useful
+end
