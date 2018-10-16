@@ -1,2 +1,2 @@
 #!/bin/bash
-fceux --loadlua ./main.lua --nogui 1 --mute 1 "./Dr. Mario # NES.NES"
+fceux --loadlua ./main.lua --nogui --mute 1 drmario.nes 

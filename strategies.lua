@@ -55,7 +55,7 @@ function playSarsaGame(learning_rate, discount_rate)
 	print("Playing game with SARSA learning. Logging to " .. filename)
 
 	log = io.open(filename, "w+");
-	log:write("episode,frame,mode,score,action\n");
+	log:write("episode,score\n");
 
 	local saved_scores = {}	
 	local current_state
@@ -67,7 +67,7 @@ function playSarsaGame(learning_rate, discount_rate)
 
 	local episode_number = 1
 
-	while(true) do
+	while(episode_number <= 1000) do
 
 		enterGame()
 
@@ -84,7 +84,7 @@ function playSarsaGame(learning_rate, discount_rate)
 
 			next_state = getRelativeStateAsArray()
 			next_action_name = getActionForSarsa(saved_scores, next_state)
-			reward = getScore() - score_last_frame - 1 -- -1 to punish it for not learning
+			reward = 1000*(getScore() - score_last_frame) - 1 -- -1 to punish it for not learning
 			if(getMode() == GAME_MODE_JUST_LOST) then
 				reward = -100
 				print("Lost a game.");
@@ -94,10 +94,10 @@ function playSarsaGame(learning_rate, discount_rate)
 
 			saved_scores = learn_sarsa(current_state, current_action_name, reward, next_state, next_action_name, learning_rate, discount_rate, saved_scores)		
 
-			log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", current_action_name, "\n")
 		end
 
 		print("Episode done. Score " .. getScore())
+		log:write(episode_number, ",", getScore(), "\n")
 
 		episode_number = episode_number + 1
 
