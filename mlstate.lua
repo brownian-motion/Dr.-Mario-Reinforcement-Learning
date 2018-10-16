@@ -13,7 +13,10 @@ function learn_sarsa(current_state, current_action, reward, next_state, next_act
 	local next_state_score = getSavedScore(saved_scores, next_state_as_str, next_action, INITIAL_SCORE);
 	local next_score = current_score + learning_rate * (reward + discount_rate * next_state_score - current_score);
 
-	setSavedScore(saved_scores, current_state_as_str, current_action, INITIAL_SCORE)
+
+	initial_state = {left = INITIAL_SCORE, right = INITIAL_SCORE, A = INITIAL_SCORE, [""] = INITIAL_SCORE}
+
+	setSavedScore(saved_scores, current_state_as_str, current_action, next_score, initial_state)
 
 	return saved_scores -- not necessary, since tables are pass-by-reference, but could be useful
 end
@@ -25,9 +28,9 @@ function getSavedScore(saved_scores, state_name, action_name, initial_value)
 	return saved_scores[state_name][action_name];
 end
 
-function setSavedScore(saved_scores, state_name, action_name, value)
+function setSavedScore(saved_scores, state_name, action_name, value, initial_state)
 	if (saved_scores[state_name] == nil) then
-		saved_scores[state_name] = {};
+		saved_scores[state_name] = initial_state;
 	end
 	saved_scores[state_name][action_name] = value;
 end

@@ -1,7 +1,7 @@
 require "actions"
 require "gamestate"
 require "mlstate"
-
+require "drawstate"
 
 function printControllerState(file, buttons)
 	file:write(buttons["left"] and 1 or 0, ",")
@@ -50,10 +50,12 @@ end
 
 function playSarsaGame(learning_rate, discount_rate)
 
-	print("Playing game with SARSA learning. Logging to dr_mario.csv")
+	local filename = os.date("dr_mario_%Y_%m_%d_%H_%M.csv")
 
-	log = io.open("dr_mario.csv", "w+");
-	log:write("episode,frame,mode,score,action\n");
+	print("Playing game with SARSA learning. Logging to " .. filename)
+
+	-- log = io.open(filename, "w+");
+	-- log:write("episode,frame,mode,score,action\n");
 
 	local saved_scores = {}	
 	local current_state
@@ -76,6 +78,7 @@ function playSarsaGame(learning_rate, discount_rate)
 			current_action_name = getActionForSarsa(saved_scores, current_state)
 			score_last_frame = getScore()
 
+			drawBoxAroundPill()
 			joypad.write(1, getActionForName(current_action_name))
 			emu.frameadvance()
 
@@ -91,7 +94,7 @@ function playSarsaGame(learning_rate, discount_rate)
 
 			saved_scores = learn_sarsa(current_state, current_action_name, reward, next_state, next_action_name, learning_rate, discount_rate, saved_scores)		
 
-			log:write(episode_number, emu.framecount(), ",", getMode(), ",", getScore(), ",", current_action_name, "\n")
+			-- log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", current_action_name, "\n")
 		end
 
 		print("Episode done. Score " .. getScore())
@@ -104,3 +107,16 @@ end
 function getActionForSarsa(saved_scores, state)
 	return getBestActionAndScoreForState(saved_scores, state) or getRandomActionNameForSarsa()
 end
+
+
+function drawBoxAroundPill()
+	local r, c = getPillRC()
+	local state = getRelativeStateAsTable()
+	drawBoxAroundTiles(r, c - SEARCH_DIST_BESIDE, r - SEARCH_DIST_BELOW, c + SEARCH_DIST_BESIDE)
+	for col_offset = -SEARCH_DIST_BESIDE, SEARCH_DIST_BESIDE do
+		local highest = state.grid[col_offset]
+		local color = highest.is_virus and "#FF000077" or "#00FFFF77"
+		drawBoxAroundTile(r - highest.dist_below, c + col_offset, color);
+	end
+end
+

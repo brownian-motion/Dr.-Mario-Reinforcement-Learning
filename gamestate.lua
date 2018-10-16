@@ -1,5 +1,5 @@
-HIGHEST_ROW = 0
-LOWEST_ROW = 15
+HIGHEST_ROW = 15
+LOWEST_ROW = 0
 LEFTMOST_COL = 0
 RIGHTMOST_COL = 7
 
@@ -49,7 +49,7 @@ function getPlayFieldTile(row, col)
 	if (row < 0 or row >= 16 or col < 0 or col >= 8) then
 		return -1
 	else
-		return memory.readbyte(0x0400 + 8*row + col)
+		return memory.readbyte(0x0400 + 8*(16-row) + col)
 	end
 end
 
@@ -58,7 +58,7 @@ function getPillOrientation()
 end
 
 function isVirus(tile_value)
-	return tile_value >= 208 or tile_value <= 210
+	return tile_value >= 208 and tile_value <= 210
 end
 
 function isPellet(tile_value)
@@ -80,11 +80,16 @@ function getRowOfHighestBlockBelow(row, col)
 	end
 
 	for row_offset = 0,(SEARCH_DIST_BELOW-1) do
-		if(not isEmpty(row + row_offset, col)) then
-			return row + row_offset
+		local relevant_row = row - row_offset
+		if ( relevant_row < LOWEST_ROW) then
+			return LOWEST_ROW
+		end
+		local tile_value = getPlayFieldTile(relevant_row, col)
+		if(not isEmpty(tile_value)) then
+			return relevant_row
 		end
 	end
-	return row + SEARCH_DIST_BELOW
+	return row - SEARCH_DIST_BELOW
 end
 
 function convertColorToMatching(color, pill_left_color, pill_right_color)
@@ -125,7 +130,8 @@ function getLocalNeighborhoodBelow(pill_state)
 			row = getRowOfHighestBlockBelow(pill_state.row, col)
 		end
 
-		local dist_below = row - pill_state.row
+		local dist_below = pill_state.row - row
+		if(dist_below < 0) then dist_below = 0 end
 		local tile_value = getPlayFieldTile(row, col)
 		local color = getColor(tile_value)
 		local is_virus = isVirus(tile_value)
