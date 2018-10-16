@@ -33,17 +33,7 @@ function drawBoxAroundTiles(row1, col1, row2, col2, color)
 
 	local left, top = getTopLeftCornerOfGameTile(row1, col1)
 	local right, bottom = getBottomRightCornerOfGameTile(row2, col2)
-	-- gui.drawrect(left, top, right, bottom, color)
-	-- gui.setpixel(left, top, "red")
-	-- gui.setpixel(left+1, top, "red")
-	-- gui.setpixel(left, top+1, "red")
-	-- gui.setpixel(left-1, top, "red")
-	-- gui.setpixel(left, top-1, "red")
-	-- gui.setpixel(right, bottom, "blue")
-	-- gui.setpixel(right+1, bottom, "blue")
-	-- gui.setpixel(right, bottom+1, "blue")
-	-- gui.setpixel(right-1, bottom, "blue")
-	-- gui.setpixel(right, bottom-1, "blue")
+    gui.drawrect(left, top, right, bottom, color)
 end
 
 function drawBoxAroundTile(row, col, color)
