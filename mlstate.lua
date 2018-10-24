@@ -51,9 +51,9 @@ function getBestActionAndScoreForState(saved_scores, state_name)
 end
 
 function qlearn(current_state, current_action, reward, learning_rate, discount_rate, saved_scores, next_state)
-	assert(type(current_state) == "table", "Current state for SARSA learning must be a table")
-	assert(type(next_state) == "table", "Next state for SARSA learning must be a table")
-	assert(type(current_action) == "string", "Current action for SARSA learning must be a string")
+	assert(type(current_state) == "table", "Current state for Q learning must be a table")
+	assert(type(next_state) == "table", "Next state for Q learning must be a table")
+	assert(type(current_action) == "string", "Current action for Q learning must be a string")
 	--assert(type(next_action) == "string", "Next state for SARSA learning must be a string")
 
 	local current_state_as_str = table.concat(current_state, ",");

@@ -51,3 +51,267 @@ end
 function getRandomActionNameForSarsa()
 	return getNameOfAction(getRandomButtonPressAction());
 end
+
+function getRandomCapsulePlacement()
+	local prob = math.random(26)
+	local column = prob % 8
+	local orient = prob % 4
+	if (orient == 1) then orient = 'vertical'
+	elseif (orient == 2) then orient = 'rev_horizontal'
+	elseif (orient == 3) then orient = 'rev_vertical'
+	else orient = 'horizontal'
+	end
+	return {column, orient}
+end
+
+-- action scripts for each placement possibility
+function placeCapsule(action)
+
+	local column = action[1]
+	local orient = action[2]
+
+	if (column == 0) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move left 3 times
+		for i=1,3 do
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {left = true})
+		end
+		return
+	end
+
+	if (column == 1) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move left 2 times
+		for i=1,2 do
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {left = true})
+		end
+		return
+	end
+
+	if (column == 2) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move left 1 time
+		emu.frameadvance()
+		emu.frameadvance()
+		emu.frameadvance()
+		joypad.write(1, {left = true})
+		return
+	end
+
+	if (column == 3) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		return
+	end
+
+	if (column == 4) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move right 1 time
+		emu.frameadvance()
+		emu.frameadvance()
+		emu.frameadvance()
+		joypad.write(1, {right = true})
+		return
+	end
+
+	if (column == 5) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move right 2 times
+		for i=1,2 do
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {right = true})
+		end
+		return
+	end
+
+	if (column == 6) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_horizontal') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move right 3 times
+		for i=1,3 do
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {right = true})
+		end
+		return
+	end
+
+	if (column == 7) then
+		if (orient == 'vertical') then
+			joypad.write(1, {A = true})
+		end
+		if (orient == 'rev_vertical') then
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {A = true})
+		end
+
+		-- move right 4 times
+		for i=1,4 do
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+			joypad.write(1, {right = true})
+		end
+		return
+	end
+end

@@ -133,7 +133,7 @@ function drawBoxAroundPill()
 	end
 end
 
-function playQLearning(learning_rate, discount_rate)
+function playQLearning(learning_rate, discount_rate, strategy)
 
 	local filename = os.date("dr_mario_%Y_%m_%d_%H_%M.csv")
 
@@ -158,28 +158,62 @@ function playQLearning(learning_rate, discount_rate)
 
 		print("Starting episode " .. episode_number)
 
-		while(getMode() == GAME_MODE_PLAYING) do -- TODO: handle end of stage, dying, etc.
-			current_state = getRelativeStateAsArray()
-			current_action_name = getBestActionForQ(saved_scores, current_state)
-			score_last_frame = getScore()
+		if (strategy == 'scripted') then
+			while (strategy == 'scripted' and getMode() == GAME_MODE_PLAYING) do
+				current_state = getRelativeStateAsArray()
+				current_action_name = getBestScriptForQ(saved_scores, state)
+				score_last_frame = getScore()
 
-			drawBoxAroundPill()
-			joypad.write(1, getActionForName(current_action_name))
-			emu.frameadvance()
+				placeCapsule(current_action_name)
 
-			next_state = getRelativeStateAsArray()
-			--next_action_name = getBestActionForQ(saved_scores, next_state)
-			reward = (getScore() - score_last_frame)*1000 - 1 -- -1 to punish it for not learning
-			if(getMode() == GAME_MODE_JUST_LOST) then
-				reward = -50
-				print("Lost a game.");
-			elseif(getMode() ~= GAME_MODE_PLAYING) then
-				print("NEW GAME MODE DISCOVERED ".. getMode())
+				print("Current action " .. current_action_name[1])
+				pillRC = getPillRC()
+
+				print("Capsule location: " .. pillRC)
+
+				while (pillRC ~= 15) do
+					emu.frameadvance()
+					emu.frameadvance()
+					emu.frameadvance()
+				end
+
+				next_state = getRelativeStateAsArray()
+				reward = (getScore() - score_last_frame)*1000 - 1 -- -1 to punish it for not learning
+				if(getMode() == GAME_MODE_JUST_LOST) then
+					reward = -50
+					print("Lost a game.");
+				elseif(getMode() ~= GAME_MODE_PLAYING) then
+					print("NEW GAME MODE DISCOVERED ".. getMode())
+				end
+
+				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)	
+				log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
 			end
 
-			saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)		
+		else
+			while(getMode() == GAME_MODE_PLAYING) do -- TODO: handle end of stage, dying, etc.
+				current_state = getRelativeStateAsArray()
+				current_action_name = getBestActionForQ(saved_scores, current_state)
+				score_last_frame = getScore()
 
-			--log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
+				drawBoxAroundPill()
+				joypad.write(1, getActionForName(current_action_name))
+				emu.frameadvance()
+
+				next_state = getRelativeStateAsArray()
+				--next_action_name = getBestActionForQ(saved_scores, next_state)
+				reward = (getScore() - score_last_frame)*1000 - 1 -- -1 to punish it for not learning
+				if(getMode() == GAME_MODE_JUST_LOST) then
+					reward = -50
+					print("Lost a game.");
+				elseif(getMode() ~= GAME_MODE_PLAYING) then
+					print("NEW GAME MODE DISCOVERED ".. getMode())
+				end
+
+				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)		
+
+				--log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
+			end
 		end
 
 		print("Episode done. Score " .. getScore())
@@ -191,4 +225,8 @@ end
 
 function getBestActionForQ(saved_scores, state)
 	return getBestActionAndScoreForState(saved_scores, state) or getRandomActionNameForSarsa()
+end
+
+function getBestScriptForQ(saved_scores, state)
+	return getBestActionAndScoreForState(saved_scores, state) or getRandomCapsulePlacement()
 end
