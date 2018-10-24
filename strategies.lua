@@ -166,15 +166,20 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 				placeCapsule(current_action_name)
 
-				print("Current action " .. current_action_name[1])
-				pillRC = getPillRC()
+				print("Current action " .. current_action_name)
+				-- advance some frames to allow the capsule to move
+				while (getPillRC() == 15) do
+					emu.frameadvance()
+					emu.frameadvance()
+					emu.frameadvance()
+				end
 
-				print("Capsule location: " .. pillRC)
-
-				while (pillRC ~= 15) do
-					emu.frameadvance()
-					emu.frameadvance()
-					emu.frameadvance()
+				-- wait for the next capsule to drop
+				-- this ensures any score changes have happened
+				while (getPillRC() ~= 15) do
+					for i = 1, 10 do
+						emu.frameadvance()
+					end
 				end
 
 				next_state = getRelativeStateAsArray()

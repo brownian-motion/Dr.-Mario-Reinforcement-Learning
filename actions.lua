@@ -53,24 +53,25 @@ function getRandomActionNameForSarsa()
 end
 
 function getRandomCapsulePlacement()
-	local prob = math.random(26)
-	local column = prob % 8
-	local orient = prob % 4
+	local column = tostring(math.random(8) % 8)
+	local orient = math.random(4) % 4
+
+	-- Note: may need to catch column 7 + horizontal combination if it becomes a problem
 	if (orient == 1) then orient = 'vertical'
 	elseif (orient == 2) then orient = 'rev_horizontal'
 	elseif (orient == 3) then orient = 'rev_vertical'
 	else orient = 'horizontal'
 	end
-	return {column, orient}
+	return (column .. orient)
 end
 
 -- action scripts for each placement possibility
 function placeCapsule(action)
 
-	local column = action[1]
-	local orient = action[2]
+	local column = action:sub(1,1)
+	local orient = string.sub(action, 2)
 
-	if (column == 0) then
+	if (column == '0') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -103,7 +104,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 1) then
+	if (column == '1') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -136,7 +137,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 2) then
+	if (column == '2') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -167,7 +168,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 3) then
+	if (column == '3') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -192,7 +193,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 4) then
+	if (column == '4') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -223,7 +224,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 5) then
+	if (column == '5') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -256,7 +257,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 6) then
+	if (column == '6') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
@@ -289,7 +290,7 @@ function placeCapsule(action)
 		return
 	end
 
-	if (column == 7) then
+	if (column == '7') then
 		if (orient == 'vertical') then
 			joypad.write(1, {A = true})
 		end
