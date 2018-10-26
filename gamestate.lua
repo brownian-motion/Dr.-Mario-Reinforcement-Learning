@@ -15,7 +15,9 @@ SEARCH_DIST_BELOW = 5
 SEARCH_DIST_BESIDE = 2
 
 
-GAME_MODE_MENU = 255
+GAME_MODE_BOOTING = 255
+GAME_MODE_MENU = 0
+GAME_MODE_OPTIONS = 1
 GAME_MODE_STARTING = 8
 GAME_MODE_PLAYING = 4
 GAME_MODE_JUST_LOST = 5
@@ -27,6 +29,14 @@ function getScore()
 	memory.readbyte(0x072C)*100  + 
 	memory.readbyte(0x072D)*1000 + 
 	memory.readbyte(0x072E)*10000
+end
+
+function getVirusLevel()
+	return memory.readbyte(0x0096)
+end
+
+function setVirusLevel(level)
+	memory.writebyte(0x0096, level)
 end
 
 function getMode()

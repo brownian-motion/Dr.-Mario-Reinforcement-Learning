@@ -9,25 +9,47 @@ function printControllerState(file, buttons)
 	file:write(buttons["A"] and 1 or 0, ",")
 end
 
--- enter the game
-function enterGame()
-	while((getMode() ~= GAME_MODE_STARTING) and (getMode() ~= GAME_MODE_PLAYING)) do
-		joypad.write(1, startAction());
-		emu.frameadvance();
-		joypad.write(1, noAction());
-		-- print(getMode());
-		emu.frameadvance();
+function pressAndRelease(player, joypad_state)
+	joypad.write(player, joypad_state);
+	emu.frameadvance();
+	joypad.write(player, noAction());
+	emu.frameadvance();
+end
+
+-- enter the game, optionally at the given virus leve1l
+function enterGame(starting_virus_level)
+	if(starting_virus_level and getMode() ~= GAME_MODE_STARTING and getMode() ~= GAME_MODE_PLAYING) then
+		-- get to the options menu
+		-- print("Going to the options menu")
+		while(getMode() ~= GAME_MODE_OPTIONS) do
+			pressAndRelease(1, startAction());
+		end
+
+		-- move the "Virus level" cursor to the right level.
+		-- this seems to be necessary because directly editing the memory doesn't seem to work
+		-- print("Moving the virus level cursor to " .. starting_virus_level)
+		while(getVirusLevel() < starting_virus_level) do
+			pressAndRelease(1, rightAction())
+		end
 	end
-	while (getMode() ~= GAME_MODE_PLAYING) do
-		emu.frameadvance();
+
+	-- print("Starting the game")
+	while(getMode() ~= GAME_MODE_STARTING)  do
+		pressAndRelease(1, startAction());
+	end
+	while(getMode() ~= GAME_MODE_PLAYING)  do
+		joypad.write(1, noAction())
+		emu.frameadvance()
 	end
 end
 
 function playRandomGame()
 
-	print("Playing game with random controller. Logging to dr_mario.csv")
+	local filename = os.date("logs/dr_mario_random_%Y_%m_%d_%H_%M.csv")
 
-	log = io.open("dr_mario.csv", "w+");
+	print("Playing game with a random controller. Logging to " .. filename)
+
+	log = io.open(filename, "w+");
 	log:write("frame,mode,score,action\n");
 
 	while(true) do
@@ -48,9 +70,9 @@ function playRandomGame()
 	end
 end
 
-function playSarsaGame(learning_rate, discount_rate)
+function playSarsaGame(learning_rate, discount_rate, starting_virus_level)
 
-	local filename = os.date("dr_mario_%Y_%m_%d_%H_%M.csv")
+	local filename = os.date("logs/dr_mario_sarsa_%Y_%m_%d_%H_%M.csv")
 
 	print("Playing game with SARSA learning. Logging to " .. filename)
 
@@ -70,9 +92,11 @@ function playSarsaGame(learning_rate, discount_rate)
 
 	while(episode_number <= 1000) do
 
-		enterGame()
+		enterGame(starting_virus_level)
 
 		print("Starting episode " .. episode_number)
+		print("Virus level: " .. getVirusLevel())
+		print("Game mode: " .. getMode())
 
 		while(getMode() == GAME_MODE_PLAYING) do -- TODO: handle end of stage, dying, etc.
 			current_state = getRelativeStateAsArray()
@@ -135,7 +159,7 @@ end
 
 function playQLearning(learning_rate, discount_rate, strategy)
 
-	local filename = os.date("dr_mario_%Y_%m_%d_%H_%M.csv")
+	local filename = os.date("logs/dr_mario_Q_%Y_%m_%d_%H_%M.csv")
 
 	print("Playing game with Q learning. Logging to " .. filename)
 
