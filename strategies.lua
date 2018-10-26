@@ -182,7 +182,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 		if (strategy == 'scripted') then
 			while (strategy == 'scripted' and getMode() == GAME_MODE_PLAYING) do
-				current_state = getRelativeStateAsArray()
+				current_state = getHighestMatchingArray()
 				current_action_name = getBestScriptForQ(saved_scores, state)
 				score_last_frame = getScore()
 
