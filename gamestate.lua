@@ -6,7 +6,8 @@ RIGHTMOST_COL = 7
 MATCHES_NONE = 0
 MATCHES_LEFT = 1
 MATCHES_RIGHT = 2
-MATCHES_BOTH = MATCHES_LEFT -- to keep state space down; setting to 3 would allow for decisions to utilize both identical sides
+--MATCHES_BOTH = MATCHES_LEFT -- to keep state space down; setting to 3 would allow for decisions to utilize both identical sides
+MATCHES_BOTH = 3
 
 PILL_HORIZ = 0
 PILL_VERT = 1
@@ -84,6 +85,20 @@ function getColor(tile_value)
 	return AND(tile_value, 0x3)
 end
 
+function getHighestBlockForColumn(col)
+	if(col < LEFTMOST_COL or col > RIGHTMOST_COL) then
+		return HIGHEST_ROW
+	end
+
+	for i=HIGHEST_ROW, 0, -1 do
+		local tile_value = getPlayFieldTile(i, col)
+		if (not isEmpty(tile_value)) then
+			return i
+		end
+	end
+	return -1
+end
+
 function getRowOfHighestBlockBelow(row, col)
 	if(col < LEFTMOST_COL or col > RIGHTMOST_COL) then
 		return HIGHEST_ROW
@@ -126,6 +141,31 @@ function getPillState()
 	else
 		return { row = r, col = c, left_color = col_l, right_color = col_r, orientation = orient }
 	end
+end
+
+function getHighestBlocksArray()
+	local highest_blocks = {}
+	for i = 0, 7 do
+		highest_blocks[i] = getHighestBlockForColumn(i)
+	end
+
+	return highest_blocks
+end
+
+function convertBlockArrayToMatching(block_array, pill)
+	local matching_array = {}
+	for i = 0, 7 do
+		-- if the column is empty
+		if (block_array[i] == -1) then 
+			matching_array[i+1] = MATCHES_NONE
+		else
+			local tile_value = getPlayFieldTile(block_array[i], i)
+			local color = getColor(tile_value)
+			matching_array[i+1] = convertColorToMatching(color, pill.left_color, pill.right_color)
+		end
+	end
+
+	return matching_array
 end
 
 function getLocalNeighborhoodBelow(pill_state)
@@ -174,4 +214,8 @@ end
 
 function getRelativeStateAsArray()
 	return convertRelativeStateToArray(getRelativeStateAsTable())
+end
+
+function getHighestMatchingArray()
+	return convertBlockArrayToMatching(getHighestBlocksArray(), getPillState())
 end

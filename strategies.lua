@@ -204,7 +204,10 @@ function playQLearning(learning_rate, discount_rate, strategy)
 					end
 				end
 
-				next_state = getRelativeStateAsArray()
+				--next_state = getRelativeStateAsArray()
+				next_state = getHighestMatchingArray()
+				print(next_state)
+
 				reward = (getScore() - score_last_frame)*1000 - 1 -- -1 to punish it for not learning
 				if(getMode() == GAME_MODE_JUST_LOST) then
 					reward = -50
