@@ -222,7 +222,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 		end
 
 		print("Episode done. Score " .. getScore())
-		log:write(episode_number, ",", getScore())
+		log:write(episode_number, ",", getScore(), "\n")
 		episode_number = episode_number + 1
 
 	end
