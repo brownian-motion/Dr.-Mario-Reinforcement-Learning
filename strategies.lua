@@ -95,8 +95,6 @@ function playSarsaGame(learning_rate, discount_rate, starting_virus_level)
 		enterGame(starting_virus_level)
 
 		print("Starting episode " .. episode_number)
-		print("Virus level: " .. getVirusLevel())
-		print("Game mode: " .. getMode())
 
 		while(getMode() == GAME_MODE_PLAYING) do -- TODO: handle end of stage, dying, etc.
 			current_state = getRelativeStateAsArray()
