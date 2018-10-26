@@ -1,2 +1,2 @@
 #!/bin/bash
-fceux --loadlua ./main.lua --nogui --mute 1 drmario.nes 
+fceux --loadlua ./main.lua --nogui --sound 0 drmario.nes 
