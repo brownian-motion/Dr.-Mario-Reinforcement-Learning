@@ -59,6 +59,7 @@ function qlearn(current_state, current_action, reward, learning_rate, discount_r
 	local current_state_as_str = table.concat(current_state, ",");
 	--local next_state_as_str = table.concat(next_state, ",");
 
+	
 	local current_score = getSavedScore(saved_scores, current_state_as_str, current_action, INITIAL_SCORE);
 	local next_state_score = getSavedScore(saved_scores, next_state_as_str, next_action, INITIAL_SCORE);
 	--local next_score = current_score + learning_rate * (reward + discount_rate * next_state_score - current_score);
@@ -68,8 +69,15 @@ function qlearn(current_state, current_action, reward, learning_rate, discount_r
 
 
 	initial_state = {left = INITIAL_SCORE, right = INITIAL_SCORE, A = INITIAL_SCORE, [""] = INITIAL_SCORE}
+	--initial_state = 0
 
 	setSavedScore(saved_scores, current_state_as_str, current_action, next_score, initial_state)
 
 	return saved_scores -- not necessary, since tables are pass-by-reference, but could be useful
+end
+
+function qlearn_rebuild(current_state, current_action, reward, discount, saved_scores, next_state)
+	local current_state_as_str = table.concat(current_state, ",")
+	local current_score = getSavedScore(saved_scores, current_state_as_str, current_action, 0)
+	local _,max_score = getBestActionAndScoreForState(saved_scores,next_state)
 end

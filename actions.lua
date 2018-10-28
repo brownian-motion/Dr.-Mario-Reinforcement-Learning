@@ -56,7 +56,12 @@ function getRandomCapsulePlacement()
 	local column = tostring(math.random(8) % 8)
 	local orient = math.random(4) % 4
 
-	-- Note: may need to catch column 7 + horizontal combination if it becomes a problem
+	-- reroll if we get an impossible action
+	while ((column == 7) and ((orient == 0) or (orient == 2))) do
+		column = tostring(math.random(8) % 8)
+		orient = math.random(4) % 4
+	end
+
 	if (orient == 1) then orient = 'vertical'
 	elseif (orient == 2) then orient = 'rev_horizontal'
 	elseif (orient == 3) then orient = 'rev_vertical'
@@ -68,251 +73,43 @@ end
 -- action scripts for each placement possibility
 function placeCapsule(action)
 
-	local column = action:sub(1,1)
+	local column = tonumber(action:sub(1,1))
 	local orient = string.sub(action, 2)
+	local goal_orient = 0
+	local pill_r, pill_c = getPillRC()
 
-	if (column == '0') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-
-		-- move left 3 times
-		for i=1,3 do
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {left = true})
-		end
-		return
+	if (orient == 'vertical') then
+		goal_orient = 3
+	elseif (orient == 'rev_horizontal') then
+		goal_orient = 2
+	elseif (orient == 'rev_vertical') then
+		goal_orient = 1
 	end
 
-	if (column == '1') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-
-		-- move left 2 times
-		for i=1,2 do
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {left = true})
-		end
-		return
+	if (((goal_orient == 0) or (goal_orient == 2)) and (column == 7)) then
+		column = 6
 	end
 
-	if (column == '2') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
+	while ((getPillOrientation() ~= goal_orient) and (getMode() == GAME_MODE_PLAYING)) do
+		joypad.write(1, {A = true})
+		emu.frameadvance()
+		emu.frameadvance()
+		emu.frameadvance()
+	end
 
-		-- move left 1 time
-		emu.frameadvance()
-		emu.frameadvance()
-		emu.frameadvance()
+	while ((pill_c > column) and (getMode() == GAME_MODE_PLAYING)) do
 		joypad.write(1, {left = true})
-		return
+		emu.frameadvance()
+		emu.frameadvance()
+		emu.frameadvance()
+		pill_r, pill_c = getPillRC()
 	end
 
-	if (column == '3') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		return
-	end
-
-	if (column == '4') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-
-		-- move right 1 time
-		emu.frameadvance()
-		emu.frameadvance()
-		emu.frameadvance()
+	while ((pill_c < column) and (getMode() == GAME_MODE_PLAYING)) do
 		joypad.write(1, {right = true})
-		return
-	end
-
-	if (column == '5') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-
-		-- move right 2 times
-		for i=1,2 do
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {right = true})
-		end
-		return
-	end
-
-	if (column == '6') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_horizontal') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-
-		-- move right 3 times
-		for i=1,3 do
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {right = true})
-		end
-		return
-	end
-
-	if (column == '7') then
-		if (orient == 'vertical') then
-			joypad.write(1, {A = true})
-		end
-		if (orient == 'rev_vertical') then
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {A = true})
-		end
-
-		-- move right 4 times
-		for i=1,4 do
-			emu.frameadvance()
-			emu.frameadvance()
-			emu.frameadvance()
-			joypad.write(1, {right = true})
-		end
-		return
+		emu.frameadvance()
+		emu.frameadvance()
+		emu.frameadvance()
+		pill_r, pill_c = getPillRC()
 	end
 end

@@ -176,7 +176,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 	while(episode_number <= 1000) do
 
-		enterGame()
+		enterGame(5)
 
 		print("Starting episode " .. episode_number)
 
@@ -190,7 +190,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 				print("Current action " .. current_action_name)
 				-- advance some frames to allow the capsule to move
-				while (getPillRC() == 15) do
+				while ((getPillRC() == 15) and (getMode() == GAME_MODE_PLAYING)) do
 					emu.frameadvance()
 					emu.frameadvance()
 					emu.frameadvance()
@@ -198,7 +198,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 				-- wait for the next capsule to drop
 				-- this ensures any score changes have happened
-				while (getPillRC() ~= 15) do
+				while ((getPillRC() ~= 15) and (getMode() == GAME_MODE_PLAYING)) do
 					for i = 1, 10 do
 						emu.frameadvance()
 					end
@@ -217,7 +217,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 				end
 
 				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)	
-				log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
+				--log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
 			end
 
 		else
@@ -259,4 +259,26 @@ end
 
 function getBestScriptForQ(saved_scores, state)
 	return getBestActionAndScoreForState(saved_scores, state) or getRandomCapsulePlacement()
+end
+
+function testScripts()
+	enterGame()
+
+	while (getMode() == GAME_MODE_PLAYING) do
+		placeCapsule('6rev_vertical')
+
+		while ((getPillRC() == 15) and (getMode() == GAME_MODE_PLAYING)) do
+			emu.frameadvance()
+			emu.frameadvance()
+			emu.frameadvance()
+		end
+	
+		-- wait for the next capsule to drop
+		-- this ensures any score changes have happened
+		while ((getPillRC() ~= 15) and (getMode() == GAME_MODE_PLAYING)) do
+			for i = 1, 10 do
+				emu.frameadvance()
+			end
+		end
+	end
 end
