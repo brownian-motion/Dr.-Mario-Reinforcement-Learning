@@ -216,7 +216,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 					print("NEW GAME MODE DISCOVERED ".. getMode())
 				end
 
-				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)	
+				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state, strategy)	
 				--log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
 			end
 
@@ -240,7 +240,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 					print("NEW GAME MODE DISCOVERED ".. getMode())
 				end
 
-				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state)		
+				saved_scores = qlearn(current_state, current_action_name, reward, learning_rate, discount_rate, saved_scores, next_state, strategy)		
 
 				--log:write(episode_number, ",", emu.framecount(), ",", getMode(), ",", getScore(), ",", reward, ",", current_action_name, "\n")
 			end

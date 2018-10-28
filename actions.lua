@@ -70,6 +70,17 @@ function getRandomCapsulePlacement()
 	return (column .. orient)
 end
 
+function getAllCapsulePlacementActions()
+	local out = {}
+	local actions = {"vertical", "horizontal", "rev_horizontal", "rev_vertical"}
+	for col in 1,8 do
+		for action in actions do
+			out:append(col .. action)
+		end
+	end
+	return out
+end
+
 -- action scripts for each placement possibility
 function placeCapsule(action)
 

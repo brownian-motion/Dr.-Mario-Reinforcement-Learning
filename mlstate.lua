@@ -50,7 +50,7 @@ function getBestActionAndScoreForState(saved_scores, state_name)
 	return max_action, max_score;
 end
 
-function qlearn(current_state, current_action, reward, learning_rate, discount_rate, saved_scores, next_state)
+function qlearn(current_state, current_action, reward, learning_rate, discount_rate, saved_scores, next_state, strategy)
 	assert(type(current_state) == "table", "Current state for Q learning must be a table")
 	assert(type(next_state) == "table", "Next state for Q learning must be a table")
 	assert(type(current_action) == "string", "Current action for Q learning must be a string")
@@ -67,8 +67,15 @@ function qlearn(current_state, current_action, reward, learning_rate, discount_r
 	max_score = max_score or INITIAL_SCORE
 	local next_score = (1 - learning_rate)*current_score + learning_rate*(reward + discount_rate*max_score)
 
+	local initial_state = {}
 
-	initial_state = {left = INITIAL_SCORE, right = INITIAL_SCORE, A = INITIAL_SCORE, [""] = INITIAL_SCORE}
+	if strategy == 'scripted' then
+		for action in getAllCapsulePlacementActions() do
+			initial_state[action] = INITIAL_SCORE
+		end
+	else
+		initial_state = {left = INITIAL_SCORE, right = INITIAL_SCORE, A = INITIAL_SCORE, [""] = INITIAL_SCORE}
+	end
 	--initial_state = 0
 
 	setSavedScore(saved_scores, current_state_as_str, current_action, next_score, initial_state)
