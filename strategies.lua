@@ -136,6 +136,7 @@ function playSarsaGame(learning_rate, discount_rate, starting_virus_level)
 		episode_number = episode_number + 1
 
 	end
+	log:close()
 end
 
 function getActionForSarsa(saved_scores, state)
@@ -258,10 +259,11 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 		print("Episode done. Score " .. getScore())
 		log:write(episode_number, ",", getScore(), "\n")
-		flog:flush()
+		log:flush()
 		episode_number = episode_number + 1
 
 	end
+	log:close()
 end
 
 function getBestActionForQ(saved_scores, state)
