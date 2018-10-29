@@ -43,30 +43,39 @@ function enterGame(starting_virus_level)
 	end
 end
 
-function playRandomGame()
+function playRandomGame(starting_virus_level)
 
 	local filename = os.date("logs/dr_mario_random_%Y_%m_%d_%H_%M.csv")
 
 	print("Playing game with a random controller. Logging to " .. filename)
 
-	log = io.open(filename, "w+");
-	log:write("frame,mode,score,action\n");
+	local log = io.open(filename, "w+");
+	log:write("episode,score\n");
+	local episode_number = 1
 
-	while(true) do
-		button_state = getRandomButtonPressAction();
-		joypad.write(1, button_state);
-		score = getScore();
+	while(episode_number <= 1000) do
 
-		log:write(emu.framecount(), ",");
-		log:write(getMode(), ",");
-		log:write(score, ",");
-		log:write(getNameOfAction(button_state));
-		log:write("\n");
-		log:flush();
+		enterGame(starting_virus_level or 1)
+		print("Starting episode " .. episode_number)
 
-		print(getRelativeStateAsArray())
+		while(getMode() == GAME_MODE_PLAYING) do -- TODO: handle end of stage, dying, etc.
+			button_state = getRandomButtonPressAction();
+			joypad.write(1, button_state);
+			emu.frameadvance()
 
-		emu.frameadvance();
+			if(getMode() == GAME_MODE_JUST_LOST) then
+				print("Lost a game.");
+			elseif(getMode() ~= GAME_MODE_PLAYING) then
+				print("NEW GAME MODE DISCOVERED ".. getMode())
+			end
+		end
+
+		print("Episode done. Score " .. getScore())
+
+		log:write(episode_number, ",", getScore(), "\n")
+		log:flush()
+
+		episode_number = episode_number + 1
 	end
 end
 
@@ -122,6 +131,7 @@ function playSarsaGame(learning_rate, discount_rate, starting_virus_level)
 
 		print("Episode done. Score " .. getScore())
 		log:write(episode_number, ",", getScore(), "\n")
+		log:flush()
 
 		episode_number = episode_number + 1
 
@@ -248,6 +258,7 @@ function playQLearning(learning_rate, discount_rate, strategy)
 
 		print("Episode done. Score " .. getScore())
 		log:write(episode_number, ",", getScore(), "\n")
+		flog:flush()
 		episode_number = episode_number + 1
 
 	end
