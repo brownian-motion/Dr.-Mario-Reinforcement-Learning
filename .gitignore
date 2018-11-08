@@ -1,3 +1,11 @@
 *.log
 *.csv
 *.NES
+*.dvi
+*.blg
+*.fdb_latexmk
+*.bbl
+*.aux
+*~
+*.fls
+*.pdf
