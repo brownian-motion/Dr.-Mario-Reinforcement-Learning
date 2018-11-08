@@ -85,20 +85,45 @@ Both agents also performed some optimizations of state, in order to treat simila
 
 We also created a random controller, which would randomly decide each frame between pressing left, pressing right, rotating, or taking no action. We decided to compare the efficacy of each controller or agent by comparing the slope of how much more reward it earned per episode increased over time.
 
+For each agent, we rewarded it 2000 points for removing a virus, punished it 50 points for losing a game, and punished it 1 point each time it made a decision to encourage the agent to try new actions over time. After each episode, we recorded the final game score, which is 2 time the number of viruses cleared.
+
+The SARSA controller learned extremely slowly. We determined that part of the reason for this was that the default difficulty has very few viruses on the screen, and thus very little opportunity for an agent to accidentally clear a virus and earn points. Therefore, we learned from the SARSA experiment that we should start with a higher difficulty. The results from running the game at higher difficulty is presented below.
+
 \subsection{Results}
+
+We ran several experiments in each controller and compared the trend of how the game score increased with increasing episode number, as shown in Fig.~\ref{fig:random-results}. The random controller, predictably, did not improve over time; surprisingly, it did manage to clear one virus about once every four epsiodes on average.
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{random_results_n3.png}
+\caption{Avg.~reward across 3 experiments for an episode vs.~episode number, with a random controller.}\label{fig:random-results}
+\end{figure}
+
+Despite starting at a higher difficulty, the SARSA agent with a local state learned very slowly, as shown in Fig.~\ref{fig:sarsa-results}. On average, it increased its score by 1.3e-5 points each episode. With this trend, it would only clear an additional virus off the screen every 7,500 attempts! As shown in Fig.~\ref{fig:sarsa-results}, the agent was often able to clear a single virus off the screen, but could not reliably remove more.
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{sarsa_results_n6.png}
+\caption{Avg.~reward across 6 experiments for an episode vs.~episode number, with a SARSA agent. While the slope appears to be zero, it is slightly positive (1.3e-5).}\label{fig:sarsa-results}
+\end{figure}
+
+The Q-learning agent learned much more quickly, often clearing 3 viruses at a time, but then plateued soon after it reached that level of skill. As shown in Fig.~\ref{fig:q-results}, the agent's typical behavior never improved beyond that point; however, it did actually manage to clear a level once, and its outlier behavior greatly outperformed both SARSA and the random controller.
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{q-learning-results.png}
+\caption{Avg.~reward across for an episode vs.~episode number, with a Q-learning agent. Note the marked positive slope, and the spikes indicating occaisional very high performance.}\label{fig:q-results}
+\end{figure}
 
 
 \subsection{Discussion}
+We found that a Q-learning agent making high-level decisions will outperform a SARSA agent making low-level decisions, at least for the first few thousand episodes. Both of those agents outperform an agent that presses buttons at random. Q-learning learns quickly, but doesn't improve much after that, while SARSA learning shows slow, steady improvement over time. As we discuss in Section~\ref{sec:future-work}, if we can encourage the agents with more frequent rewards, we expect both of them to make further and quicker progress.
 
 \section{Related Work}
 
-\section{Future Work}
+\section{Future Work}\label{sec:future-work}
 In the future, we think we could improve the efficacy of the learning algorithms by rewarding agents for accomplishing sub-goals as discussed in~\cite{banzas15} and~\cite{bhonker17}, such as rewarding the agent for matching smaller numbers of matching colors or for matching a series of only capsule blocks (which the game does not reward), rather than only rewarding it for making matches that include colored virus blocks.
 
 \section{Conclusion}
 
 \newpage
-\section{Bibliography}
 
 \bibliography{report}
 
