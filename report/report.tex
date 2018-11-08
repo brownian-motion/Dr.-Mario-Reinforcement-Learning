@@ -46,13 +46,30 @@ We selected the classic video game ``Dr.~Mario'' by~\cite{drmario90} as the best
 
 \section{Problem Definition and Approaches}
 \subsection{Task Definition}
+We wanted to make machine learning agents that could play the classic video game ``Dr.~Mario'' for the Nintendo Entertainment System (NES). Therefore, we decided to use the FCEUX emulator, since it presented the most convenient interface between agent code and game actions. First, it has built in support for scripting with Lua​, which provides the agent with a way to execute actions and read the game state. Specifically, the game memory is polled periodically to retrieve values for the score, as well as location and type of blocks​ in the game area. Further, there is no hidden information that a human player would not see​: the agent only has access to information that would be displayed visually to a human. Finally, FCEUX provides a convenient way for Lua scripts to send commands to the emulator to emulate pressing a button on the NES controller. For these reasons, we decided to implement our agents in Lua scripts controlling the FCEUX emulator.
+
+In Dr.~Mario, the player controls capsules with a color at each end that slowly fall down the screen, and tries to place the colored ends on ``virus'' blocks of the same color. If four blocks of the same color touch in a straight line, they are removed, and the player is awarded 200 points for any virus blocks removed in this way. Once the player removes all of the viruses on the screen, they complete the level and move to the next one. We wanted to train machine learning agents to complete at least one level, and outperform a ``random'' controller that presses a random button every frame.
 
 \subsection{Algorithm Definition}
+We developed two machine learning agents which learn using Q-learning and using SARSA. Each associates a value \(Q(s, a)\) with each possible state/action pair, and updates those values as it is rewarded or punished for taking an action \(a\) in a state \(s\).
+
+For Q-learning, the value is updated after performing action \(a\) in state \(s\) to arrive in state \(s'\), yielding reward \(r\), with the following algorithm:
+\begin{equation}
+Q(s, a) \leftarrow Q(s, a) + \alpha * (r + \gamma * {\max}_{a'} Q(s', a') - Q(s, a))
+\end{equation}
+
+And similarly, SARSA updates values with the following algorithm:
+\begin{equation}
+Q(s, a) \leftarrow Q(s, a) + \alpha * (r + \gamma * Q(s', a') - Q(s, a))
+\end{equation}
+where the agent decides to perform action \(a'\) immediately upon arriving in state \(s'\), according to the current policy.
 
 \section{Experimental Evaluation}
 \subsection{Methodology}
 
+
 \subsection{Results}
+
 
 \subsection{Discussion}
 
