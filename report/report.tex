@@ -29,12 +29,16 @@
 \maketitle
 
 \begin{abstract}
-We trained machine learning agents that manipulate an NES controller to play Dr.~Mario, using the FCEUX emulator\cite{fceux18}.
+We trained machine learning agents that manipulate an NES controller to play Dr.~Mario\cite{drmario90}, using the FCEUX emulator\cite{fceux18}.
 Both Q-learning and SARSA learning algorithms showed some advantage over a random controller.
 We compared a SARSA agent that viewed the local ``neighborhood'' around the player's capsule and controlled the controller directly to a Q-learning agent that viewed the entire topmost layer of viruses and executed high-level actions in the game. Ultimately, while we believe the local ``neighborhood'' state space may allow for the highest theoretical quality of performance, the Q-learning agent with a high-level controller yielded the best results, with the fastest rate of learning and the highest average performance.
 \end{abstract}
 
 \section{Introduction}
+Video games are an interesting application for developing machine learning agents beacuse the strictly-defined playing space provides a clean, simple environment for learning. Furthermore, they are also interesting such that they challenge the player to develop an effective strategy. We researchers, then, seek to determine whether a machine learning agent, using a simple learning algorithm, can effectively develop such strategies as to ``beat'' those games on par with a human, or if the game requires such skill as to mandate a human player.
+
+We selected the classic video game ``Dr.~Mario''\cite{drmario90} as the best candidate to develop a machine learning agent for, because we believed the simple yet challenging puzzle of dropping colored capsules would be viable for a machine learning agent to solve, yet difficult enough to force the agent to develop an effective strategy for winning.
+
 
 \section{Problem Definition and Approaches}
 
@@ -46,6 +50,7 @@ We compared a SARSA agent that viewed the local ``neighborhood'' around the play
 
 \section{Conclusion}
 
+\newpage
 \section{Bibliography}
 
 \bibliography{report}
