@@ -17,6 +17,7 @@
 
 \usepackage{natbib}
 \usepackage{url}
+\usepackage{graphicx}
 
 \author{Ryan Gately and JJ Brown}
 \date{\today}
@@ -66,7 +67,23 @@ where the agent decides to perform action \(a'\) immediately upon arriving in st
 
 \section{Experimental Evaluation}
 \subsection{Methodology}
+We wanted to compare the effectiveness of an agent making high-level decisions versus one that manipulates the controller directly. We designed a Q-learning agent that would observe the colors of the highest block in each column as shown in Fig.~\ref{fig:high-level-state}, and use that to decide into which column (and with what orientation) the agent should drop the capsule. To carry out these high-level decisions, we made some simple algorithms to press buttons until the capsule was in the desired column and orientation, and then lower it into place. We believed that this high-level decision-making would be able to learn more quickly than a low-level approach, since it could achieve resutls in fewer steps. A single episode was concluded when the agent either won or lost a level.
 
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{high-level-state.png}
+\caption{How the Q-learning agent extracts its state for high-level decision-making.}\label{fig:high-level-state}
+\end{figure}
+
+We also designed a SARSA agent that would observe only the blocks around it, and use that information to directly manipulate the controller. This agent perceived the highest blocks in the ``neighborhood'' of tiles within 2 tiles sideways and 5 below, and observed both the color and relative depth of those blocks as shown in Fig.~\ref{fig:local-state}. Using that information, the agent decided whether to move the player's capsule left, move it right, rotate it, or take no action. Similarly to the Q-learning experiment, an episode was concluded when the agent won or lost a level. Unlike that experiment, this agent made a decision once every frame, rather than once for each player capsule.
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{local-state.png}
+\caption{A representation of how the SARSA agent extracts its local state for low-level decision-making.}\label{fig:local-state}
+\end{figure}
+
+Both agents also performed some optimizations of state, in order to treat similar arrangements the same. For example, both agents observed not the exact color of each tile, but a presentation of four options: whether that tile matched the left part of the capsule, the right part, both, or neither. This way, a red capsule descending towards a red virus could be treated the same as a blue capsule descending towards a blue virus, and learning could be shared among similar states.
+
+We also created a random controller, which would randomly decide each frame between pressing left, pressing right, rotating, or taking no action. We decided to compare the efficacy of each controller or agent by comparing the slope of how much more reward it earned per episode increased over time.
 
 \subsection{Results}
 
