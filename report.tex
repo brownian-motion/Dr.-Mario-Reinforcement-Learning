@@ -1,0 +1,46 @@
+\def\year{2018}\relax
+%Taken from file: formatting-instruction.tex
+\documentclass[letterpaper]{article} %DO NOT CHANGE THIS
+\usepackage{aaai18}  %Required
+\usepackage{times}  %Required
+\usepackage{helvet}  %Required
+\usepackage{courier}  %Required
+\usepackage{url}  %Required
+\usepackage{graphicx}  %Required
+\frenchspacing  %Required
+\setlength{\pdfpagewidth}{8.5in}  %Required
+\setlength{\pdfpageheight}{11in}  %Required
+%PDF Info Is Required:
+  \pdfinfo{
+/Title (Removing Viruses with Machine Learning in Dr.~Mario)
+/Author (Ryan Gately and JJ Brown)}
+
+\author{Ryan Gately and JJ Brown}
+\date{\today}
+\title{Removing Viruses with Machine Learning in Dr.~Mario}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We trained machine learning agents that manipulate an emulated NES controller to play Dr.~Mario.
+Both Q-learning and SARSA learning algorithms showed some advantage over a random controller.
+We compared a SARSA agent that viewed the local ``neighborhood'' around the player's capsule and controlled the controller directly to a Q-learning agent that viewed the entire topmost layer of viruses and executed high-level actions in the game. Ultimately, while we believe the local ``neighborhood'' state space may allow for the highest theoretical quality of performance, the Q-learning agent with a high-level controller yielded the best results, with the fastest rate of learning and the highest average performance.
+\end{abstract}
+
+\section{Introduction}
+
+\section{Problem Definition and Approaches}
+
+\section{Experimental Evaluation}
+
+\section{Related Work}
+
+\section{Future Work}
+
+\section{Conclusion}
+
+\section{Bibliography}
+
+\end{document}
